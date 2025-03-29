@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/sahas/OneDrive/Desktop/EEE2021Programming/CFiles",
-      "program": "c:/Users/sahas/OneDrive/Desktop/EEE2021Programming/CFiles/build/Debug/outDebug",
+      "cwd": "c:/Users/sahas/OneDrive/Desktop/EEE2021Programming/GeMM_C_Implementations",
+      "program": "c:/Users/sahas/OneDrive/Desktop/EEE2021Programming/GeMM_C_Implementations/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
