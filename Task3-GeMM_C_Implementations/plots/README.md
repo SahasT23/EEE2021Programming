@@ -6,6 +6,7 @@ This file contains the relevant instructions for the coursework, regarding tasks
 ## Task 3
 
 The code for Task 3 has been stored in a folder called 'Task3_GeMM_C_Implementations'. It contains two C files, two Python files and relevant CSV files for plotting purposes.
+
 ---
 ### C File no. 1
 
