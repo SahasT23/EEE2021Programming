@@ -12,6 +12,7 @@ The code for Task 3 has been stored in a folder called 'Task3_GeMM_C_Implementat
 This file is called '**GEMM.c**', containing 6 different loop orderings for the matrix multiplication aspect of the assignment. It uses square test matrices from 10x10 to 400x400 to give the user a wide range of values for comparison. This task is a demonstration of how cache locality and memory access patterns can affect the speed of the program. 
 
 To run this file, use git clone to make a copy of this repository and then run '**gcc -o GEMM.c GEMM.exe**' in the terminal of the text editor or IDE to compile and create an executable file. After you can see the executable, then add the command '**./GEMM**' to actually run the program. The output should be a CSV file and terminal output to show the times to the user. After the CSV file has been generated, run the python file (**GEMMPlotting.py**) for an easy to read .png image file.
+
 ---
 ### C File no. 2
 
