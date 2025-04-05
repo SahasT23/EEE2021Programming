@@ -22,9 +22,11 @@ double measure_time(int (*func)(int), int input, int iterations) {
     start = clock();  // Function call:
     
     for (int i = 0; i < iterations; i++) {  // Loop initialisation and control:
-        // li t0, 0                Initialising i = 0 in t0.
-        // loop_start:
-        // bge t0, a2, loop_end    Exit loop if i >= iterations (a2) Acts like a conditional statement.
+        /**
+         * li t0, 0                Initialising i = 0 in t0.
+         * loop_start:
+         * bge t0, a2, loop_end    Exit loop if i >= iterations (a2) Acts like a conditional statement.
+         */
         
         result = func(input);      // Function call through pointer:
     }
@@ -36,6 +38,8 @@ double measure_time(int (*func)(int), int input, int iterations) {
 /** 
  * 1. Standard iterative implementation
  * Not RISC-V, uses multiplication.
+ * Time: O(n) - Does exactly n multiplications
+ * Space: O(1) - Fixed memory for 2 variables 
 */
 int iterative_array(int n) {
     /**
@@ -63,16 +67,19 @@ int iterative_array(int n) {
     }
     
     return result;        // Return the result:
-    // mv a0, t0          Moves the result to a0 (return register)
-    
-    // lw ra, 12(sp)      Restores the return address
-    // addi sp, sp, 16    Deallocates the stack frame
-    // jalr zero, ra, 0   Return to function caller
-    // Add time and space complexity later, talk about the stack later.
+    /**
+     * mv a0, t0          Moves the result to a0 (return register)
+     * lw ra, 12(sp)      Restores the return address
+     * addi sp, sp, 16    Deallocates the stack frame
+     * jalr zero, ra, 0   Return to function caller
+     * Add time and space complexity later, talk about the stack later.
+     */
 }
 
-/*
+/** 
  * 2. Recursive implementation with special case (for extra marks)
+ * Time: O(n) - Makes n function calls
+ * Space: O(n) - Needs n stack frames
  */
 int recursive(int n) {
     /**
@@ -109,20 +116,23 @@ int recursive(int n) {
  * without using the MUL instruction, because multiplication is just repeated addition
  */
 int add_multiplication(int a, int b) {
-    // Function prologue:
-    // addi sp, sp, -16     Allocate stack frame
-    // sw ra, 12(sp)        Save return address
+    /**
+     * addi sp, sp, -16     Allocate stack frame
+     * sw ra, 12(sp)        Save return address
+     */
     
     int sum = 0;          // Initialise sum to 0:
     // li t0, 0            t0 will hold the sum
     
     for (int i = 0; i < b; i++) {  // Loop setup:
-        // li t1, 0           Initialise i = 0 in t1
-        // loop_start:
-        // bge t1, a1, loop_end  # Exit if i >= b (a1)
+        /**
+         * li t1, 0           Initialise i = 0 in t1
+         * loop_start:
+         * bge t1, a1, loop_end   Exit if i >= b (a1)
+         */
         
         /**
-         * sum += a;          // Addition instead of multiplication:
+         * sum += a;          Addition instead of multiplication:
          * add t0, t0, a0   sum += a
          * addi t1, t1, 1     Increment i
          * j loop_start       Jump back to start of loop
@@ -131,20 +141,22 @@ int add_multiplication(int a, int b) {
     }
     
     return sum;            // Return sum:
-    // mv a0, t0            Move sum to a0 (return register)
-    
-    // Function epilogue:
-    // lw ra, 12(sp)        Restore return address
-    // addi sp, sp, 16      Deallocate stack frame
-    // jalr zero, ra, 0     Return to caller
+    /**
+     * mv a0, t0            Move sum to a0 (return register)
+     * 
+     * lw ra, 12(sp)        Restore return address
+     * addi sp, sp, 16      Deallocate stack frame
+     * jalr zero, ra, 0     Return to caller
+     */
 }
 
-/*
+/** 
  * 3. Iterative implementation without using the MUL instruction
  * Shows nested loops and simulates assembly-level multiplication
+ * Time: O(n²) - Does 1+2+3+...+n = n(n+1)/2 additions
+ * Space: O(1) - Fixed memory (4 variables) 
  */
 int iterativeRISCV(int n) {
-    // Function prologue:
     // addi sp, sp, -16     Allocate stack frame
     // sw ra, 12(sp)        Save return address
     
@@ -152,106 +164,122 @@ int iterativeRISCV(int n) {
     // li t0, 1             t0 will hold result
     
     for (int i = 1; i <= n; i++) {  // Outer loop setup:
-        // li t1, 1           Initialise i = 1 in t1
-        // outer_loop_start:
-        // bgt t1, a0, outer_loop_end     Exit if i > n (a0)
+        /** 
+         * li t1, 1           Initialise i = 1 in t1
+         * outer_loop_start:
+         * bgt t1, a0, outer_loop_end     Exit if i > n (a0)
+        */
         
         int temp = 0;      // Initialise temp for multiplication:
         // li t2, 0           t2 will hold temp
         
         for (int j = 0; j < i; j++) {  // Inner loop for multiplication:
-            // li t3, 0        # Initialize j = 0 in t3
-            // inner_loop_start:
-            // bge t3, t1, inner_loop_end  # Exit if j >= i (t1)
+            /**
+             * li t3, 0        # Initialize j = 0 in t3
+             * inner_loop_start:
+             * bge t3, t1, inner_loop_end  # Exit if j >= i (t1)
+             */
             
             temp += result;  // Add result to temp i times:
-            // add t2, t2, t0     temp += result
-            
-            // addi t3, t3, 1     Increment j
-            // j inner_loop_start   Jump back to inner loop start
-            // inner_loop_end:
+            /**
+             * add t2, t2, t0     temp += result
+             * 
+             * addi t3, t3, 1     Increment j
+             * j inner_loop_start   Jump back to inner loop start
+             * inner_loop_end:
+             */
         }
         
         result = temp;     // Update result:
-        // mv t0, t2        result = temp
-        
-        // addi t1, t1, 1     Increment i
-        // j outer_loop_start     Jump back to outer loop start
-        // outer_loop_end:
+
     }
     
     return result;         // Return result:
-    // mv a0, t0              Move result to a0 (return register)
-    
-    // Function epilogue:
-    // lw ra, 12(sp)          Restore return address
-    // addi sp, sp, 16        Deallocate stack frame
-    // jalr zero, ra, 0       Return to caller
+    /**
+     * mv a0, t0              Move result to a0 (return register)
+     *
+     *  lw ra, 12(sp)          Restore return address
+     * addi sp, sp, 16        Deallocate stack frame
+     * jalr zero, ra, 0       Return to caller
+     */
 }
+     
 
-/*
+/** 
  * 4. Recursive implementation without using the MUL instruction
  * Shows both recursion and simulated assembly-level multiplication
+ * Time: O(n²) - Each call does O(n) work, n times total
+ * Space: O(n) - Needs stack for n recursive calls
+ * Much worse in terms of complexity, need
  */
-int recursiveRISCV(int n) {
-    // Function prologue:
+int recursiveRISCV(int n) { 
     // addi sp, sp, -24       Allocate stack frame
     // sw ra, 20(sp)          Save return address
     
     if (n <= 1) return 1;  // Base case check:
-    // bgt a0, 1, recursive_call      If n > 1, branch to recursive call
-    // li a0, 1                       Load 1 into return register
-    // j return_path                  Jump to function return
-    
-    // recursive_call:
-    // sw a0, 16(sp)        Save n on stack
+    /**
+     * bgt a0, 1, recursive_call      If n > 1, branch to recursive call
+     * li a0, 1                       Load 1 into return register
+     * j return_path                  Jump to function return
+     * recursive_call:
+     * sw a0, 16(sp)        Save n on stack
+     */
     
     int prevResult = recursiveRISCV(n - 1);  // Recursive call:
-    // addi a0, a0, -1      Compute n-1
-    // jal ra, recursiveRISCV     Call recursiveRISCV(n-1)
-    // mv t1, a0              Save return value to t1 (prevResult)
-    // lw t0, 16(sp)        Restore n from stack
-    
+    /**
+     * addi a0, a0, -1      Compute n-1
+     * jal ra, recursiveRISCV     Call recursiveRISCV(n-1)
+     * mv t1, a0              Save return value to t1 (prevResult)
+     * lw t0, 16(sp)        Restore n from stack
+     */
     int result = 0;        // Initialise result for multiplication:
     // li t2, 0             t2 will hold result
     
     // Multiply prevResult by n using addition:
     for (int i = 0; i < n; i++) {  // Loop setup:
-        // li t3, 0           Initialise i = 0 in t3
-        // loop_start:
-        // bge t3, t0, loop_end     Exit if i >= n (t0)
+        /**
+         * li t3, 0           Initialise i = 0 in t3
+         * loop_start:
+         * bge t3, t0, loop_end     Exit if i >= n (t0)
+         */
         
         result += prevResult;  // Add prevResult to result n times:
-        // add t2, t2, t1 # result += prevResult
-        
-        // addi t3, t3, 1     Increment i
-        // j loop_start       Jump back to start of loop
-        // loop_end:
+        /**
+         * add t2, t2, t1 # result += prevResult
+         * 
+         * addi t3, t3, 1     Increment i
+         * j loop_start       Jump back to start of loop
+         * loop_end:
+         */
     }
     
     return result;         // Return result:
-    // mv a0, t2             Move result to a0 (return register)
-    
-    // return_path:
-    // Function epilogue:
-    // lw ra, 20(sp)         Restore return address
-    // addi sp, sp, 24       Deallocate stack frame
-    // jalr zero, ra, 0     Return to caller
+    /**
+     * mv a0, t2             Move result to a0 (return register)
+     * 
+     * return_path:
+     * Function epilogue:
+     * lw ra, 20(sp)         Restore return address
+     * addi sp, sp, 24       Deallocate stack frame
+     * jalr zero, ra, 0     Return to caller
+     */
 }
 
 int main() {
-    // Function prologue:
-    // addi sp, sp, -64     Allocate stack frame
-    // sw ra, 60(sp)        Save return address
-    // sw s0, 56(sp)         Save callee-saved registers
-    // sw s1, 52(sp)        Save more registers as needed
+    /**
+     * addi sp, sp, -64     Allocate stack frame
+     * sw ra, 60(sp)        Save return address
+     * sw s0, 56(sp)         Save callee-saved registers
+     * sw s1, 52(sp)        Save more registers as needed
+     */
     
-    // Create CSV file:
     FILE *csv = fopen("factorial_results.csv", "w");
-    // la a0, str_filename      Load address of filename string
-    // la a1, str_mode          Load address of mode string "w"
-    // jal ra, fopen            Call fopen function
-    // mv s0, a0                Save file pointer to s0
+    /**
+     * la a0, str_filename      Load address of filename string
+     * la a1, str_mode          Load address of mode string "w"
+     * jal ra, fopen            Call fopen function
+     * mv s0, a0                Save file pointer to s0
+     */
     
     if (!csv) {
         perror("Error creating CSV file");
@@ -273,18 +301,19 @@ int main() {
 
     // Test inputs:
     int test_input[] = {3, 6, 7, 8};
-    // Array would be stored on stack:
-    // li t0, 3
-    // sw t0, 0(sp)     # test_input[0] = 3
-    // li t0, 6
-    // sw t0, 4(sp)     # test_input[1] = 6
-    // li t0, 7
-    // sw t0, 8(sp)     # test_input[2] = 7
-    // li t0, 8
-    // sw t0, 12(sp)    # test_input[3] = 8
+    /**
+     * Array would be stored on stack:
+     * li t0, 3
+     * sw t0, 0(sp)     # test_input[0] = 3
+     * li t0, 6
+     * sw t0, 4(sp)     # test_input[1] = 6
+     * li t0, 7
+     * sw t0, 8(sp)     # test_input[2] = 7
+     * li t0, 8
+     * sw t0, 12(sp)    # test_input[3] = 8
+     */
     
     const int num_inputs = sizeof(test_input) / sizeof(test_input[0]);
-    // This would be computed at compile time:
     // li s1, 4           s1 = num_inputs = 4
     
     // Number of iterations for timing:
@@ -302,7 +331,6 @@ int main() {
     };
 
     const int num_methods = sizeof(methods) / sizeof(methods[0]);
-    // This would be computed at compile time:
     // li s3, 4         # s3 = num_methods = 4
     
     // Test all methods (outer loop):
