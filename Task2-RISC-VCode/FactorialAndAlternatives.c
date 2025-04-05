@@ -1,6 +1,19 @@
 #include <stdio.h>  
 #include <time.h>   // Maybe don't need to worry about this for the assembly annotations. Not sure though.
 
+/**
+ * Need to add:
+ * 1. space and time complexity
+ * 2. Explanation for stack usage
+ * 3. demonstrate I know how the stack works.
+ * 4. Create a graph for comparison, add in larger values and increase the array size. (still considering)
+ * 5. Add Task 1 writing to google doc. Make sure the cyclical strucuture idea links throughout the report -> refer to ideas in task 1 in tasl 3.,
+ * 6. Add in pseudocode to show understanding for the difference between iterative and recursive method (link to point one).
+ * 7. find GPU emulators to show why optimisation is necessary (more for task 1).
+ * 8. wait until lectures start for Task 2B help.
+ * 9. Add C kernel for Jupyter Notebook. Convert writte notes for GeMM to Python prototype and C code. 
+ */
+
 double measure_time(int (*func)(int), int input, int iterations) {
     
     clock_t start, end;  // Local variables already allocated on stack. 
@@ -20,10 +33,10 @@ double measure_time(int (*func)(int), int input, int iterations) {
     return ((double)(end - start)) / CLOCKS_PER_SEC / iterations;
 }
 
-/*
+/** 
  * 1. Standard iterative implementation
  * Not RISC-V, uses multiplication.
- */
+*/
 int iterative_array(int n) {
     /**
      * addi sp, sp, -16   Allocates stack frame.
@@ -52,7 +65,6 @@ int iterative_array(int n) {
     return result;        // Return the result:
     // mv a0, t0          Moves the result to a0 (return register)
     
-    // Function epilogue:
     // lw ra, 12(sp)      Restores the return address
     // addi sp, sp, 16    Deallocates the stack frame
     // jalr zero, ra, 0   Return to function caller
@@ -96,25 +108,26 @@ int recursive(int n) {
  * This simulates how RISC-V would implement multiplication
  * without using the MUL instruction, because multiplication is just repeated addition
  */
-int add_multiply(int a, int b) {
+int add_multiplication(int a, int b) {
     // Function prologue:
     // addi sp, sp, -16     Allocate stack frame
     // sw ra, 12(sp)        Save return address
     
     int sum = 0;          // Initialise sum to 0:
-    // li t0, 0            t0 will hold sum
+    // li t0, 0            t0 will hold the sum
     
     for (int i = 0; i < b; i++) {  // Loop setup:
-        // li t1, 0           Initialize i = 0 in t1
+        // li t1, 0           Initialise i = 0 in t1
         // loop_start:
         // bge t1, a1, loop_end  # Exit if i >= b (a1)
         
-        sum += a;          // Addition instead of multiplication:
-        // add t0, t0, a0   sum += a
-        
-        // addi t1, t1, 1     Increment i
-        // j loop_start       Jump back to start of loop
-        // loop_end:
+        /**
+         * sum += a;          // Addition instead of multiplication:
+         * add t0, t0, a0   sum += a
+         * addi t1, t1, 1     Increment i
+         * j loop_start       Jump back to start of loop
+         * loop_end:
+         */
     }
     
     return sum;            // Return sum:
@@ -243,14 +256,16 @@ int main() {
     if (!csv) {
         perror("Error creating CSV file");
         return 1;
-        // beqz s0, error_handler     Branch if csv is NULL
-        // j file_ok                  Jump if file opened successfully
-        // error_handler:
-        // la a0, str_error           Load address of error message
-        // jal ra, perror             Call perror function
-        // li a0, 1                  Set return value to 1
-        // j main_exit                Jump to function exit
-        // file_ok:
+        /**
+         * beqz s0, error_handler     Branch if csv is NULL
+         * j file_ok                  Jump if file opened successfully
+         * error_handler:
+        la a0, str_error           Load address of error message
+        jal ra, perror             Call perror function
+        li a0, 1                  Set return value to 1
+        j main_exit                Jump to function exit
+        file_ok:
+         */
     }
     
     // Write CSV header:
