@@ -14,7 +14,7 @@ main_loop:
 	lw a0, 0(t4)              # Load value at address t4 into a0 (argument for factorial)
 
 	# Save all registers that will be used by the factorial function
-	addi sp, sp, -20          # Allocate 20 bytes on the stack
+	addi sp, sp, -20          # Allocate 20 bytes on the stack using the pointer.
 	sw t0, 0(sp)              # Save t0 (loop counter)
 	sw t1, 4(sp)              # Save t1 (array size)
 	sw t2, 8(sp)              # Save t2 (array base address)
@@ -28,8 +28,8 @@ main_loop:
 	lw t1, 4(sp)              # Restore t1 (array size)
 	lw t2, 8(sp)              # Restore t2 (array base address)
 	lw t3, 12(sp)             # Restore t3 (byte offset)
-	lw t4, 16(sp)             # Restore t4 (current element address)
-	addi sp, sp, 20           # Deallocate stack space
+	lw t4, 16(sp)             # Restore t4 (current element address in array)
+	addi sp, sp, 20           # Deallocates the stack space
 
 	# Print the factorial result
 	addi a1, a0, 0            # Move factorial result from a0 to a1 (argument for print)

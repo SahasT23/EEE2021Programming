@@ -300,7 +300,7 @@ int main() {
     fprintf(csv, "Method,Input,Result,ExecutionTime(s)\n");
 
     // Test inputs:
-    int test_input[] = {3, 6, 7, 8};
+    int test_input[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}; // Original was {3, 6, 7, 8}
     /**
      * Array would be stored on stack:
      * li t0, 3
