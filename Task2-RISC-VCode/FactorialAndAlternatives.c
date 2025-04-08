@@ -25,10 +25,10 @@ double measure_time(int (*func)(int), int input, int iterations) {
         /**
          * li t0, 0                Initialising i = 0 in t0.
          * loop_start:
-         * bge t0, a2, loop_end    Exit loop if i >= iterations (a2) Acts like a conditional statement.
+         * bge t0, a2, loop_end    Exit loop if i >= iterations (a2), so it acts like a conditional statement.
          */
         
-        result = func(input);      // Function call through pointer:
+        result = func(input);      // Function call through the pointer:
     }
     
     end = clock();       // Another function call to the clock(): 
@@ -43,7 +43,7 @@ double measure_time(int (*func)(int), int input, int iterations) {
 */
 int iterative_array(int n) {
     /**
-     * addi sp, sp, -16   Allocates stack frame.
+     * addi sp, sp, -16   Allocates the stack frame.
      * sw ra, 12(sp)      Saves the return address.
      */
     
@@ -77,7 +77,7 @@ int iterative_array(int n) {
 }
 
 /** 
- * 2. Recursive implementation with special case (for extra marks)
+ * 2. Recursive implementation with special (base case, covers 0 and 1 factorial) case (for extra marks)
  * Time: O(n) - Makes n function calls
  * Space: O(n) - Needs n stack frames
  */
@@ -133,14 +133,14 @@ int add_multiplication(int a, int b) {
         
         /**
          * sum += a;          Addition instead of multiplication:
-         * add t0, t0, a0   sum += a
-         * addi t1, t1, 1     Increment i
+         * add t0, t0, a0     sum += a
+         * addi t1, t1, 1     Increments i
          * j loop_start       Jump back to start of loop
          * loop_end:
          */
     }
     
-    return sum;            // Return sum:
+    return sum;            // Return the sum:
     /**
      * mv a0, t0            Move sum to a0 (return register)
      * 
@@ -170,14 +170,14 @@ int iterativeRISCV(int n) {
          * bgt t1, a0, outer_loop_end     Exit if i > n (a0)
         */
         
-        int temp = 0;      // Initialise temp for multiplication:
+        int temp = 0;      // Initialise temp variable for multiplication:
         // li t2, 0           t2 will hold temp
         
         for (int j = 0; j < i; j++) {  // Inner loop for multiplication:
             /**
-             * li t3, 0        # Initialize j = 0 in t3
+             * li t3, 0                    Initialise j = 0 in t3
              * inner_loop_start:
-             * bge t3, t1, inner_loop_end  # Exit if j >= i (t1)
+             * bge t3, t1, inner_loop_end  Exit if j >= i (t1)
              */
             
             temp += result;  // Add result to temp i times:
@@ -222,7 +222,7 @@ int recursiveRISCV(int n) {
      * li a0, 1                       Load 1 into return register
      * j return_path                  Jump to function return
      * recursive_call:
-     * sw a0, 16(sp)        Save n on stack
+     * sw a0, 16(sp)        Save n on the stack
      */
     
     int prevResult = recursiveRISCV(n - 1);  // Recursive call:
@@ -274,33 +274,17 @@ int main() {
      */
     
     FILE *csv = fopen("factorial_results.csv", "w");
-    /**
-     * la a0, str_filename      Load address of filename string
-     * la a1, str_mode          Load address of mode string "w"
-     * jal ra, fopen            Call fopen function
-     * mv s0, a0                Save file pointer to s0
-     */
     
     if (!csv) {
         perror("Error creating CSV file");
         return 1;
-        /**
-         * beqz s0, error_handler     Branch if csv is NULL
-         * j file_ok                  Jump if file opened successfully
-         * error_handler:
-        la a0, str_error           Load address of error message
-        jal ra, perror             Call perror function
-        li a0, 1                  Set return value to 1
-        j main_exit                Jump to function exit
-        file_ok:
-         */
     }
     
     // Write CSV header:
     fprintf(csv, "Method,Input,Result,ExecutionTime(s)\n");
 
     // Test inputs:
-    int test_input[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}; // Original was {3, 6, 7, 8}
+    int test_input[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}; // Original was {3, 6, 7, 8}, addded more values for test purpose.
     /**
      * Array would be stored on stack:
      * li t0, 3
@@ -336,70 +320,62 @@ int main() {
     // Test all methods (outer loop):
     for (int m = 0; m < num_methods; m++) {
       /**
-       * li t0, 0         # Initialize m = 0 in t0
+       * li t0, 0           Initialise m = 0 in t0
        * outer_loop_start:
-       * bge t0, s3, outer_loop_end  # Exit if m >= num_methods
+       * bge t0, s3, outer_loop_end      Exit if m >= num_methods
        */
         
         // Test all inputs (inner loop):
         for (int i = 0; i < num_inputs; i++) {
           /**
-           * li t1, 0     # Initialise i = 0 in t1
+           * li t1, 0        Initialise i = 0 in t1
            * inner_loop_start:
-           * bge t1, s1, inner_loop_end  # Exit if i >= num_inputs
+           * bge t1, s1, inner_loop_end    Exit if i >= num_inputs
            */
             
             int input = test_input[i];
             /**
              * Calculate array offset and load input value:
-             * slli t2, t1, 2   # t2 = i * 4 (byte offset)
-             * add t3, sp, t2   # t3 = address of test_input[i]
-             * lw t4, 0(t3)     # t4 = test_input[i]
+             * slli t2, t1, 2        t2 = i * 4 (to account for the byte offset)
+             * add t3, sp, t2       t3 = address of test_input[i] element i.
+             * lw t4, 0(t3)          t4 = test_input[i]
              * 
-             * Calculate methods array offset:
-             * slli t5, t0, 3   # t5 = m * 8 (struct size)
-             * addi t6, sp, 16  # t6 = base address of methods array
-             * add t6, t6, t5   # t6 = address of methods[m]
+             * Calculate methods with the array offset:
+             * slli t5, t0, 3        t5 = m * 8 (struct size)
+             * addi t6, sp, 16       t6 = base address of methods array
+             * add t6, t6, t5        t6 = address of methods[m]
              */
             
             // Call the function once for the final result:
             int result = methods[m].func(input);
             /**
-             * lw t7, 4(t6)     # t7 = methods[m].func
-             * mv a0, t4        # a0 = input
-             * jalr ra, t7, 0   # Call function
-             * mv s4, a0        # s4 = result
+             * lw t7, 4(t6)         t7 = methods[m].func
+             * mv a0, t4            a0 = input
+             * jalr ra, t7, 0        Call the function
+             * mv s4, a0             s4 = result
              */
             
             // Measuring the time taken for the methods to actually calculate everything. Couldn't use the other method, kept getting zeros.
             double time_taken = measure_time(methods[m].func, input, iterations);
             /**
-             * lw a0, 4(t6)     # a0 = methods[m].func
-             * mv a1, t4        # a1 = input
-             * mv a2, s2        # a2 = iterations
-             * jal ra, measure_time # Call measure_time
+             * lw a0, 4(t6)         a0 = methods[m].func
+             * mv a1, t4            a1 = input
+             * mv a2, s2            a2 = iterations
+             * jal ra, measure_time     Call measure_time function
              */
             
             fprintf(csv, "%s,%d,%d,%.10f\n", methods[m].name, input, result, time_taken);
-            /**
-             * mv a0, s0        # a0 = csv file pointer
-             * la a1, str_format # a1 = format string address
-             * lw a2, 0(t6)     # a2 = methods[m].name
-             * mv a3, t4        # a3 = input
-             * mv a4, s4        # a4 = result
-             * fmv.d fa0, fa0   # fa0 = time_taken (already there)
-             * jal ra, fprintf  # Call fprintf
-             */
+
             
             printf("%s for n=%d: result=%d, time=%.10f seconds\n",
                   methods[m].name, input, result, time_taken);
                 /**
                  *             // la a0, str_console_format # a0 = format string
-                 * lw a1, 0(t6)     # a1 = methods[m].name
-                 * mv a2, t4        # a2 = input
-                 * mv a3, s4        # a3 = result
-                 * fmv.d fa0, fa0   # fa0 = time_taken
-                 * jal ra, printf   # Call printf
+                 * lw a1, 0(t6)         a1 = methods[m].name
+                 * mv a2, t4            a2 = input
+                 * mv a3, s4            a3 = result
+                 * fmv.d fa0, fa0       fa0 = time_taken
+                 * jal ra, printf       Call printf function, can see output in terminal for each version of factorial function/method.
                  * 
                  * addi t1, t1, 1   # Increment i
                  * j inner_loop_start # Jump back to inner loop start
@@ -408,8 +384,8 @@ int main() {
         }
         
         /**
-         * addi t0, t0, 1     # Increment m
-         * j outer_loop_start # Jump back to outer loop start
+         * addi t0, t0, 1       Increment m
+         * j outer_loop_start   Jump back to outer loop start
          * outer_loop_end:
          */
     }
@@ -421,14 +397,13 @@ int main() {
     
     return 0;
     /**
-     * li a0, 0         # Set return value to 0
+     * li a0, 0             Set return value to 0
      * 
      * main_exit:
-     * Function epilogue:
-     * lw ra, 60(sp)    # Restore return address
-     * lw s0, 56(sp)    # Restore saved registers
-     * lw s1, 52(sp)    # Restore more registers
-     * addi sp, sp, 64  # Deallocate stack frame
-     * jalr zero, ra, 0 # Return to caller
+     * lw ra, 60(sp)         Restores return address.
+     * lw s0, 56(sp)         Restores saved registers.
+     * lw s1, 52(sp)         Restores more registers.
+     * addi sp, sp, 64       Deallocate the stack frame.
+     * jalr zero, ra, 0      Return to caller, end of.
      */
 }
