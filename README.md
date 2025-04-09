@@ -2,9 +2,9 @@
 This file contains the relevant instructions for the coursework, regarding tasks 2 and 3.
 
 ## Task 2
-This task is split into two parts, Task 2A and 2B.
+This task is split into two parts, Task 2A and 2B, as 2A is mostly code based, it is in this repository.
 
-Task 2A: this folder covers the initial boilerplate code, called '**InitialStub.c**'. To run, cd into the folder directory, then run ``gcc -o InitialStub.c InitialStub.exe``. The file will be compiled, then enter ``./InitialStub``. You can see the output using the initial array for the factorial calculation. I have added a simple recurisve function so that the code can actually run.
+Task 2A: this folder covers the initial boilerplate code, called '**InitialStub.c**'. To run, cd into the folder directory, going into ``src``, choosing the 'Task2-RISC-V-Code' folder then run ``gcc -o InitialStub.c InitialStub.exe``. The file will be compiled, then enter ``./InitialStub``. You can see the output using the initial array for the factorial calculation. I have added a simple recurisve function so that the code can actually run.
 The next file is the factorial solutions, containing 4 different solutions 1. **iterative method**, 2. **recursive method**, 3. **RISC-V style iterative method** 4. **RISC-V style recursive method** (3 and 4 don't use any multiplication to comply with the RISC-V style). to compile and run the file: 1. ``gcc -o FactorialAndAlternatives.c FactorialAndAlternatives.exe`` (compiles), then to run the program, which generates a CSV file; ``./FactorialAndAlternatives``. After the CSV file has been generated, run the **FactorialPlots.py** file, which generates a graph to show the comparison and how much longer it takes for the RISC-V style code to run. 
 
 For the second part of Task 2A, I generated the required assembly, I ran ``gcc -S FactorialAndAlternatives.c`` and ``gcc -S InitialStub.c``. I also have the two solutions for the factorial stub in RISC-V style assembly. 
