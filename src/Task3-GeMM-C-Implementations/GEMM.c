@@ -12,7 +12,7 @@
 
 // Function to get current time in microseconds (more accurate for measurement)
 /**
- * Can use again for the optimised version as well. 
+ * Can use again for the optimised version as well. I need to change this timing method. 
  */
 double get_time() {
     struct timeval timv;
