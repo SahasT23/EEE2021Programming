@@ -10,8 +10,8 @@
 // Number of 'runs' to average for each test case (best of 3, average will be )
 #define NUM_RUNS 3
 
-// Function to get current time in microseconds (more accurate for measurement)
 /**
+ * Function to get current time in microseconds (more accurate for measurement)
  * Can use again for the optimised version as well. I need to change this timing method. 
  */
 double get_time() {

@@ -21,7 +21,7 @@ double measure_time(int (*func)(int), int input, int iterations) {
     
     start = clock();  // Function call:
     
-    for (int i = 0; i < iterations; i++) {  // Loop initialisation and control:
+    for (int i = 0; i < iterations; i++) {  // Loop goes through initialisation:
         /**
          * li t0, 0                Initialising i = 0 in t0.
          * loop_start:
@@ -38,8 +38,8 @@ double measure_time(int (*func)(int), int input, int iterations) {
 /** 
  * 1. Standard iterative implementation
  * Not RISC-V, uses multiplication.
- * Time: O(n) - Does exactly n multiplications
- * Space: O(1) - Fixed memory for 2 variables 
+ * Time: O(n) - Does exactly n multiplications.
+ * Space: O(1) - Fixed memory for 2 variables. 
 */
 int iterative_array(int n) {
     /**
@@ -53,7 +53,7 @@ int iterative_array(int n) {
         /**
          * li t1, 1     Initialises i = 1 in t1
          * loop_start:
-         * bgt t1, a0, loop_end  Exit if i > n (a0) (to finish everything)
+         * bgt t1, a0, loop_end  Exit if i > n (a0) (to finish everything).
          */
     for (int i = 1; i <= n; i++) {  // Loop setup:
         
@@ -68,61 +68,61 @@ int iterative_array(int n) {
     
     return result;        // Return the result:
     /**
-     * mv a0, t0          Moves the result to a0 (return register)
-     * lw ra, 12(sp)      Restores the return address
-     * addi sp, sp, 16    Deallocates the stack frame
-     * jalr zero, ra, 0   Return to function caller
+     * mv a0, t0          Moves the result to a0 (the return register).
+     * lw ra, 12(sp)      Restores the return address.
+     * addi sp, sp, 16    Deallocates the stack frame.
+     * jalr zero, ra, 0   Return to function caller.
      * Add time and space complexity later, talk about the stack later.
      */
 }
 
 /** 
- * 2. Recursive implementation with special (base case, covers 0 and 1 factorial) case (for extra marks)
- * Time: O(n) - Makes n function calls
- * Space: O(n) - Needs n stack frames
+ * 2. Recursive implementation with special (base case, covers 0 and 1 factorial) case.
+ * Time: O(n) - Makes n function calls.
+ * Space: O(n) - Needs n stack frames.
  */
 int recursive(int n) {
     /**
-     * addi sp, sp, -16     Allocates the stack frame
-     * sw ra, 12(sp)        Saves the return address
+     * addi sp, sp, -16     Allocates the stack frame.
+     * sw ra, 12(sp)        Saves the return address.
     */
-    if (n <= 1) return 1;  // Base case check:
+    if (n == 0 || n == 1) return 1;  // Base case check:
     /**
-     * bgt a0, 1, recursive_call    If n > 1, branch to recursive call
-     * li a0, 1                     Load 1 into return register
-     * j return_path                Jump to function return
+     * bgt a0, 1, recursive_call    If n > 1, branch to recursive call.
+     * li a0, 1                     Load 1 into return register.
+     * j return_path                Jump to function return.
      * 
      * recursive_call:
      * Stack frame for recursive call:
-     * sw a0, 8(sp)         Save n on the stack
+     * sw a0, 8(sp)         Save n on the stack.
      */
-    return n * recursive(n - 1);  // Recursive call with multiplication:
+    return n * recursive(n - 1);  // Recursive call with multiplication, RISC-V version below:
     /**
-     * addi a0, a0, -1      Compute n-1
-     * jal ra, recursive    Call recursive(n-1)
-     * lw t0, 8(sp)         Restore n from stack
-     * mul a0, t0, a0       Multiply n * recursive(n-1)
+     * addi a0, a0, -1      Calculate n-1.
+     * jal ra, recursive    Call recursive(n-1) function.
+     * lw t0, 8(sp)         Restore n from stack.
+     * mul a0, t0, a0       Multiply n * recursive(n-1).
      * 
      * return_path:
-     * lw ra, 12(sp)        Restore return address
-     * addi sp, sp, 16      Deallocate stack frame
-     * jalr zero, ra, 0     Return to caller
+     * lw ra, 12(sp)        Restore the return address.
+     * addi sp, sp, 16      Deallocate stack frame.
+     * jalr zero, ra, 0     Return to caller.
      */
 }
 
 /*
- * Helper function for multiplication via addition
- * This simulates how RISC-V would implement multiplication
- * without using the MUL instruction, because multiplication is just repeated addition
+ * Helper function for multiplication via addition.
+ * This simulates how RISC-V would implement multiplication.
+ * without using the MUL instruction, because multiplication is just repeated addition and will also be needed for task 2B.
  */
 int add_multiplication(int a, int b) {
     /**
-     * addi sp, sp, -16     Allocate stack frame
-     * sw ra, 12(sp)        Save return address
+     * addi sp, sp, -16     Allocate stack frame for 4 integers.
+     * sw ra, 12(sp)        Save return address.
      */
     
     int sum = 0;          // Initialise sum to 0:
-    // li t0, 0            t0 will hold the sum
+    // li t0, 0            t0 will hold the sum for this function.
     
     for (int i = 0; i < b; i++) {  // Loop setup:
         /**
@@ -133,9 +133,9 @@ int add_multiplication(int a, int b) {
         
         /**
          * sum += a;          Addition instead of multiplication:
-         * add t0, t0, a0     sum += a
-         * addi t1, t1, 1     Increments i
-         * j loop_start       Jump back to start of loop
+         * add t0, t0, a0     sum += a.
+         * addi t1, t1, 1     Increments i.
+         * j loop_start       Jump back to the start of the loop.
          * loop_end:
          */
     }
@@ -208,7 +208,7 @@ int iterativeRISCV(int n) {
 /** 
  * 4. Recursive implementation without using the MUL instruction
  * Shows both recursion and simulated assembly-level multiplication
- * Time: O(n²) - Each call does O(n) work, n times total
+ * Time: O(n^2) - Each call does O(n) work, n times total
  * Space: O(n) - Needs stack for n recursive calls
  * Much worse in terms of complexity, need
  */
@@ -216,7 +216,7 @@ int recursiveRISCV(int n) {
     // addi sp, sp, -24       Allocate stack frame
     // sw ra, 20(sp)          Save return address
     
-    if (n <= 1) return 1;  // Base case check:
+    if (n == 0 || n == 1) return 1;  // Base case check: I initially used n <= 1, but decided to change my method
     /**
      * bgt a0, 1, recursive_call      If n > 1, branch to recursive call
      * li a0, 1                       Load 1 into return register
@@ -288,13 +288,13 @@ int main() {
     /**
      * Array would be stored on stack:
      * li t0, 3
-     * sw t0, 0(sp)     # test_input[0] = 3
+     * sw t0, 0(sp)     test_input[0] = 3
      * li t0, 6
-     * sw t0, 4(sp)     # test_input[1] = 6
+     * sw t0, 4(sp)     test_input[1] = 6
      * li t0, 7
-     * sw t0, 8(sp)     # test_input[2] = 7
+     * sw t0, 8(sp)     test_input[2] = 7
      * li t0, 8
-     * sw t0, 12(sp)    # test_input[3] = 8
+     * sw t0, 12(sp)    test_input[3] = 8
      */
     
     const int num_inputs = sizeof(test_input) / sizeof(test_input[0]);
@@ -315,7 +315,7 @@ int main() {
     };
 
     const int num_methods = sizeof(methods) / sizeof(methods[0]);
-    // li s3, 4         # s3 = num_methods = 4
+    // li s3, 4      s3 = num_methods = 4
     
     // Test all methods (outer loop):
     for (int m = 0; m < num_methods; m++) {
@@ -377,8 +377,8 @@ int main() {
                  * fmv.d fa0, fa0       fa0 = time_taken
                  * jal ra, printf       Call printf function, can see output in terminal for each version of factorial function/method.
                  * 
-                 * addi t1, t1, 1   # Increment i
-                 * j inner_loop_start # Jump back to inner loop start
+                 * addi t1, t1, 1   Increment i
+                 * j inner_loop_start  Jump back to inner loop start
                  * inner_loop_end:
                  */
         }
