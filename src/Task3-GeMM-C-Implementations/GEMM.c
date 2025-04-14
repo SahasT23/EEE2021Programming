@@ -35,7 +35,8 @@ void init_matrices(int m, int n, int k, double **A, double **B, double **C) {  /
     
     /**
      * Initialising the values of the matrices to be between 0 and 1 for matrices A and B. (1.5 marks) 
-     * Best method I have seen so far for randomisation. 
+     * Best method I have seen so far for randomisation. I see why we need it between 0 and 1. 
+     * Maybe add in a sigmoid function?? 
      */
     for (int i = 0; i < m; i++) {  // Correctly nested loops (2 marks)
         for (int j = 0; j < k; j++) {
