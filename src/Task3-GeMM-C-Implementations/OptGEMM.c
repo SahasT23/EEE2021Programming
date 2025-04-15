@@ -75,13 +75,12 @@ void free_matrices(double *A, double *B, double *C) {
 }
 
 /**
- * 1. Original MNK implementation (row-by-row)
- * Only using MNK for this, don't want the graph to look weird and jumbled together.
+ * Only using MKN for this, don't want the graph to look weird and jumbled together, also MKN was the fastest loop ordering.
  */
 void mnk_gemm(int m, int n, int k, double *A, double *B, double *C) {
     for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            for (int p = 0; p < k; p++) {
+        for (int p = 0; p < k; p++) {
+            for (int j = 0; j < n; j++) {
                 C[i*n + j] += A[i*k + p] * B[p*n + j];
             }
         }
@@ -89,24 +88,24 @@ void mnk_gemm(int m, int n, int k, double *A, double *B, double *C) {
 }
 
 /**
- * 2. Blocked/Tiled MNK implementation
+ * 2. Blocked MKN implementation
  * Need to integrate this into my report later.
  */
 void blocked_mnk_gemm(int m, int n, int k, double *A, double *B, double *C, int block_size) {
     // Iterate over 'blocks'
     for (int i0 = 0; i0 < m; i0 += block_size) {
         int i_bound = (i0 + block_size < m) ? i0 + block_size : m;
+
+        for (int p0 = 0; p0 < k; p0 += block_size) {
+            int p_bound = (p0 + block_size < k) ? p0 + block_size : k;
         
-        for (int j0 = 0; j0 < n; j0 += block_size) {
-            int j_bound = (j0 + block_size < n) ? j0 + block_size : n;
-            
-            for (int p0 = 0; p0 < k; p0 += block_size) {
-                int p_bound = (p0 + block_size < k) ? p0 + block_size : k;
+            for (int j0 = 0; j0 < n; j0 += block_size) {
+                int j_bound = (j0 + block_size < n) ? j0 + block_size : n;
                 
                 // Compute within the block
                 for (int i = i0; i < i_bound; i++) {
-                    for (int j = j0; j < j_bound; j++) {
-                        for (int p = p0; p < p_bound; p++) {
+                    for (int p = p0; p < p_bound; p++) {    
+                        for (int j = j0; j < j_bound; j++) {
                             C[i*n + j] += A[i*k + p] * B[p*n + j];
                         }
                     }
@@ -117,7 +116,7 @@ void blocked_mnk_gemm(int m, int n, int k, double *A, double *B, double *C, int 
 }
 
 /**
- * Thread function for multithreaded MNK implementation
+ * Thread function for multithreaded MKN implementation
  * (check later, maybe not the best opion)
  */
 void* mt_mnk_thread(void *arg) {
@@ -138,8 +137,8 @@ void* mt_mnk_thread(void *arg) {
     
     // Perform MNK matrix multiplication on assigned rows
     for (int i = start_row; i < end_row; i++) {
-        for (int j = 0; j < n; j++) {
-            for (int p = 0; p < k; p++) {
+        for (int p = 0; p < k; p++) {
+            for (int j = 0; j < n; j++) {
                 C[i*n + j] += A[i*k + p] * B[p*n + j];
             }
         }
@@ -205,11 +204,11 @@ void* mt_blocked_mnk_thread(void *arg) {
     for (int i0 = start_i; i0 < end_i; i0 += block_size) {
         int i_bound = (i0 + block_size < m) ? i0 + block_size : m;
         
-        for (int j0 = 0; j0 < n; j0 += block_size) {
-            int j_bound = (j0 + block_size < n) ? j0 + block_size : n;
-            
-            for (int p0 = 0; p0 < k; p0 += block_size) {
-                int p_bound = (p0 + block_size < k) ? p0 + block_size : k;
+        for (int p0 = 0; p0 < k; p0 += block_size) {
+            int p_bound = (p0 + block_size < k) ? p0 + block_size : k;
+
+            for (int j0 = 0; j0 < n; j0 += block_size) {
+                int j_bound = (j0 + block_size < n) ? j0 + block_size : n;
                 
                 // Compute within the block
                 for (int i = i0; i < i_bound; i++) {
@@ -227,7 +226,7 @@ void* mt_blocked_mnk_thread(void *arg) {
 }
 
 /**
- * 4. Combined multithreaded and blocked MNK implementation
+ * 4. Combined multithreaded and blocked MKN implementation
  */
 void mt_blocked_mnk_gemm(int m, int n, int k, double *A, double *B, double *C, int num_threads, int block_size) {
     pthread_t threads[num_threads];
@@ -278,12 +277,12 @@ int main(int argc, char *argv[]) {
     int sizes[] = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400};
     int num_sizes = sizeof(sizes) / sizeof(sizes[0]);
     
-    const char *func_names[] = {"Original MNK", "Blocked MNK", "Multithreaded MNK", "MT+Blocked MNK"};
+    const char *func_names[] = {"Original MKN", "Blocked MKN", "Multithreaded MKN", "MT+Blocked MKN"};
     int num_funcs = sizeof(func_names) / sizeof(func_names[0]);
     
-    FILE *results_file = fopen("mnk_optimized_times.csv", "w");
+    FILE *results_file = fopen("mkn_optimised_times.csv", "w");
     if (results_file == NULL) {
-        fprintf(stderr, "Error opening results file\n");
+        fprintf(stderr, "Error opening the results file\n");
         return 1;
     }
     
@@ -319,7 +318,7 @@ int main(int argc, char *argv[]) {
         }
         double mnk_time = total_time / NUM_RUNS;
         fprintf(results_file, ",%.6f", mnk_time);
-        printf("  Original MNK: %.6f s\n", mnk_time);
+        printf("  Original MKN: %.6f s\n", mnk_time);
         
         // 2. Blocked MNK
         total_time = 0.0;
