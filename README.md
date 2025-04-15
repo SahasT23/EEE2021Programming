@@ -3,9 +3,9 @@ This file contains the relevant instructions for the coursework, regarding tasks
 
 ## Repo Usage
 
-Open GIt Bash and then copy the link below:
-Use ``git clone https://github.com/SahasT23/EEE2021Programming.git``
-Then press 'enter'. Repository has been cloned! If you are the examiner, follow the instructions below
+Open GIt Bash and then copy the link below:\
+Use ``git clone https://github.com/SahasT23/EEE2021Programming.git``\
+Then press 'enter'. Repository has been cloned! If you are the examiner, follow the instructions below\
 
 1. For Task 2A part 1 -> translating from RISC-V assembly to C (worth 5 marks) look at ``InitStub.c``.
 2. For Task 2A part 2.1 -> look at ``RISC-V_Iterative.c``, for an iterative solution without the mul instruction. This has been done on purpose, to keep the code as close to the original assembly stub as possible. (Might change).
