@@ -1,9 +1,19 @@
 #include <stdio.h>
 
+/*
+Recursive works by using the previous results, as we return the previous result back into the calculation.
+Looking back at the array (3, 6, 7, 8)
+So first, the function calculates 3! normally:
+1 x 2 x 3.
+Now for 6, it uses the previously stored result for 3!. We can think of 6! like this:
+3! x 4 x 5 x 6. 
+The above uses the previous calculation for 3! 
+*/
+
 int main() {
     /* Assembly would have a .data section for the array:
        .data
-       testInput: .word 3, 6, 7, 8
+   testInput: .word 3, 6, 7, 8
        
        And then start the .text section:
        .text

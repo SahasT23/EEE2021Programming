@@ -1,5 +1,14 @@
 #include <stdio.h>
 
+/*
+Iterative works by just going through the array, looping through the elements (3, 6, 7, 8)
+so 3! :
+1 x 2 x 3,
+then 6! :
+1 x 2 x 3 x 4 x 5 x 6
+etc.
+*/
+
 int main() {
     /**
      * .data
