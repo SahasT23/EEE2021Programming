@@ -7,7 +7,8 @@ So first, the function calculates 3! normally:
 1 x 2 x 3.
 Now for 6, it uses the previously stored result for 3!. We can think of 6! like this:
 3! x 4 x 5 x 6. 
-The above uses the previous calculation for 3! 
+The above uses the previous calculation for 3! in the calculation for 6!.
+7! would then use the previous result of 6! and multiply it by 7. 
 */
 
 int main() {
