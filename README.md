@@ -4,7 +4,9 @@ This file contains the relevant instructions for the coursework, regarding tasks
 ## Repo Usage
 
 Open GIt Bash and then copy the link below:\
-Use ``git clone https://github.com/SahasT23/EEE2021Programming.git``\
+```bash
+git clone https://github.com/SahasT23/EEE2021Programming.git
+```
 Then press 'enter'. Repository has been cloned! If you are the examiner, follow the instructions below\
 
 1. For Task 2A part 1 -> translating from RISC-V assembly to C (worth 5 marks) look at ``InitStub.c``.
@@ -16,14 +18,28 @@ Then press 'enter'. Repository has been cloned! If you are the examiner, follow 
 ## Task 2
 This task is split into two parts, Task 2A and 2B, as 2A is mostly code based, it is in this repository.
 
-Task 2A: this folder covers the initial boilerplate code, called '**InitStub.c**'. To run, cd into the folder directory, going into ``src``, choosing the 'Task2-RISC-V-Code' folder then run ``gcc -o InitStub.c InitStub.exe``. The file will be compiled, then enter ``./InitStub``. You can see the output using the initial array for the factorial calculation. I have added a simple recurisve function so that the code can actually run.
+Task 2A: this folder covers the initial boilerplate code, called '**InitStub.c**'. To run, cd into the folder directory, going into ``src``, choosing the 'Task2-RISC-V-Code' folder then copy the compilation instructions below. You can see the output using the initial array for the factorial calculation. I have added a simple recurisve function so that the code can actually run.
+
+```bash
+gcc -o InitStub.c InitStub.exe
+./InitStub
+```
 
 The next two files will be simple solutions that both use the same **multiply** function to use repeated addition to simulate multiplication. They are both solutions to the RISC-V C task.
 
-This next file is entirely for my understanding. It contains the factorial solutions, containing 4 different solutions 1. **iterative method**, 2. **recursive method**, 3. **RISC-V style iterative method** 4. **RISC-V style recursive method** (3 and 4 don't use any multiplication to comply with the RISC-V style). to compile and run the file: 1. ``gcc -o FactorialAndAlternatives.c FactorialAndAlternatives.exe`` (compiles), then to run the program, which generates a CSV file; ``./FactorialAndAlternatives``. After the CSV file has been generated, run the **FactorialPlots.py** file, which generates a graph to show the comparison and how much longer it takes for the RISC-V style code to run. 
+This next file is entirely for my understanding. It contains the factorial solutions, containing 4 different solutions 1. **iterative method**, 2. **recursive method**, 3. **RISC-V style iterative method** 4. **RISC-V style recursive method** (3 and 4 don't use any multiplication to comply with the RISC-V style). to compile and run the file, follow the compilation instructions below. A CSV file will be generated. After the CSV file has been generated, run the **FactorialPlots.py** file, which generates a graph to show the comparison and how much longer it takes for the RISC-V style code to run. 
 
-For the second part of Task 2A, I generated the required assembly, I ran ``gcc -S FactorialAndAlternatives.c`` and ``gcc -S InitialStub.c``. I also have the two solutions for the factorial stub in RISC-V style assembly. 
+```bash
+gcc -o FactorialAndAlternatives.c FactorialAndAlternatives.exe
+./FactorialAndAlternatives
+```
 
+For the second part of Task 2A, I generated the required assembly, to do the same, follow the instructions below. I also have the two solutions for the factorial stub in RISC-V style assembly. 
+
+```bash
+gcc -S FactorialAndAlternatives.c 
+gcc -S InitialStub.c
+```
 ---
 ## Task 3
 

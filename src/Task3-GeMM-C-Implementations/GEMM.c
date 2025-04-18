@@ -20,6 +20,15 @@ double get_time() {
     return timv.tv_sec + timv.tv_usec * 1e-6; // Originally used division, probably a bit faster for computation. 
 }
 
+/**
+ * Sigmoid function to generate values between 0 and 1
+ * The function takes a value x and returns 1/(1+e^(-x))
+ */
+double sigmoid(double x) {
+    return 1.0 / (1.0 + exp(-x));
+}
+
+
 /*
 Initialising the matrices for AB + C.
 */
@@ -33,23 +42,46 @@ void init_matrices(int m, int n, int k, double **A, double **B, double **C) {  /
         exit(1);
     }
     
-    /**
-     * Initialising the values of the matrices to be between 0 and 1 for matrices A and B. (1.5 marks) 
-     * Best method I have seen so far for randomisation. I see why we need it between 0 and 1. 
-     * Maybe add in a sigmoid function?? 
-     */
+    // /**
+    //  * Initialising the values of the matrices to be between 0 and 1 for matrices A and B. (1.5 marks) 
+    //  * Best method I have seen so far for randomisation. I see why we need it between 0 and 1. 
+    //  * Maybe add in a sigmoid function?? 
+    //  */
+    // for (int i = 0; i < m; i++) {  // Correctly nested loops (2 marks)
+    //     for (int j = 0; j < k; j++) {
+    //         (*A)[i*k + j] = (double)rand() / RAND_MAX;
+    //     }
+    // }
+    
+    // for (int i = 0; i < k; i++) {
+    //     for (int j = 0; j < n; j++) {
+    //         (*B)[i*n + j] = (double)rand() / RAND_MAX;
+    //     }
+    // }
+    
+    // // Initialising C as a zero matrix, needed for GeMM to be done correctly. (1.5 marks)
+    // for (int i = 0; i < m; i++) {
+    //     for (int j = 0; j < n; j++) {
+    //         (*C)[i*n + j] = 0.0;
+    //     }
+    // }
+
     for (int i = 0; i < m; i++) {  // Correctly nested loops (2 marks)
         for (int j = 0; j < k; j++) {
-            (*A)[i*k + j] = (double)rand() / RAND_MAX;
+            // Generate random value between -5 and 5, then apply sigmoid
+            double random_value = ((double)rand() / RAND_MAX) * 10.0 - 5.0;
+            (*A)[i*k + j] = sigmoid(random_value);
         }
     }
     
     for (int i = 0; i < k; i++) {
         for (int j = 0; j < n; j++) {
-            (*B)[i*n + j] = (double)rand() / RAND_MAX;
+            // Generate random value between -5 and 5, then apply sigmoid
+            double random_value = ((double)rand() / RAND_MAX) * 10.0 - 5.0;
+            (*B)[i*n + j] = sigmoid(random_value);
         }
     }
-    
+
     // Initialising C as a zero matrix, needed for GeMM to be done correctly. (1.5 marks)
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {

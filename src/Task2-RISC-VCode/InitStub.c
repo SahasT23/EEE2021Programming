@@ -3,15 +3,18 @@
 /* Function prototype */
 int factorial(int n);
 
+/*
+*/
+
 int main() {
     /* .data
        test_input: .word 3 6 7 8 */
     int test_input[] = {3, 6, 7, 8};
     
-    /* add t0, x0, x0        # Initialise loop counter i to 0 */
+    // add t0, x0, x0        Initialise the loop counter i to 0 
     int i = 0;
     
-    /* addi t1, x0, 4        # Set array size to 4 */
+    // addi t1, x0, 4        Set array size to 4 as we are using 4 elements (3, 6, 7, 8)
     int array_size = 4;
     
     /* la t2, test_input     # Load address of test_input array */
